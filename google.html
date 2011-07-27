@@ -1,0 +1,16 @@
+<html>
+<body style="padding: 36px;">
+	<div style="text-align:center">
+		<form onsubmit="search();return false;">
+			<input id="q" type=text name="q" autofocus style="font: 18px Helvetica; width:500px;"/>
+		</form>
+	</div>
+
+	<SCRIPT>
+		function search() {
+			url = 'https://encrypted.google.com/#hl=en&q=' + encodeURI(document.getElementById('q').value);
+			window.location.href = url;
+		}
+	</SCRIPT>
+</body>
+</html>
