@@ -1,16 +1,39 @@
 <html>
 <body style="padding: 36px;">
 	<div style="text-align:center">
-		<form onsubmit="search();return false;">
+		<form autocomplete=on onsubmit="search(); return false;">
 			<input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;"/>
 		</form>
 	</div>
 
-	<SCRIPT>
-		function search() {
-			url = 'https://encrypted.google.com/#hl=en&q=' + encodeURI(document.getElementById('q').value);
-			window.location.href = url;
-		}
-	</SCRIPT>
+
+<SCRIPT>
+function search() {
+	var q = document.getElementById('q').value;
+	hist[q] = hist[q] || {};
+	hist[q].count = hist[q].count + 1 || 1;
+	hist[q].last = new Date();
+	window.localStorage.hist = JSON.stringify(hist);
+	url = 'https://encrypted.google.com/#hl=en&q=' + encodeURI(q);
+	window.location.href = url;
+}
+
+function pruneHistory() {
+	console.log('i should be pruning the history...');
+}
+
+try {
+	var str = window.localStorage.hist || '';
+
+	if (str.length > Math.pow(2, 20))
+		setTimeout(pruneHistory, 0);
+
+	var hist = JSON.parse(str);
+} catch (e) {
+	if (e.name !== 'SyntaxError') throw e;
+	var hist = {};
+}
+console.log(hist);
+</SCRIPT>
 </body>
 </html>
