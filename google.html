@@ -1,21 +1,37 @@
 <html>
 <body style="padding: 36px;">
 	<div style="text-align:center">
-		<form autocomplete=on onsubmit="search(); return false;">
+		<form autocomplete=on id=srch name=srch>
 			<input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;"/>
+			<input type=submit name="google_it" id="google_it" value="google it" />
+			<input type=submit name="feeling_lucky" id="feeling_lucky" value="im feelin lucky" />
 		</form>
 	</div>
 
 
 <SCRIPT>
-function search() {
-	var q = document.getElementById('q').value;
-	hist[q] = hist[q] || {};
-	hist[q].count = hist[q].count + 1 || 1;
-	hist[q].last = new Date();
+var srch = document.getElementById('srch');
+var query = document.getElementById('q');
+var lucky = document.getElementById('feeling_lucky');
+
+function AddHistoryItem(text) {
+	hist[text] = hist[text] || {};
+	hist[text].count = hist[text].count + 1 || 1;
+	hist[text].last = new Date();
 	window.localStorage.hist = JSON.stringify(hist);
-	url = 'https://encrypted.google.com/#hl=en&q=' + encodeURI(q);
-	window.location.href = url;
+	return text;
+}
+
+srch.onsubmit = function() {
+	window.location.href = 'https://encrypted.google.com/#hl=en&q=' + 
+		encodeURI(AddHistoryItem(query.value));
+	return false;
+}
+
+feeling_lucky.onclick = function() {
+	window.location.href = 'http://www.google.com/search?btnI=3564&q=' + 
+		encodeURI(AddHistoryItem(query.value));
+	return false;
 }
 
 function pruneHistory() {
