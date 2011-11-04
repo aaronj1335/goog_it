@@ -28,14 +28,13 @@ srch.onsubmit = function() {
     return false
 
 	window.location.href = 'https://encrypted.google.com/#hl=en&q=' + 
-		encodeURI(AddHistoryItem(query.value));
-
+		encodeURIComponent(AddHistoryItem(query.value));
 	return false;
 }
 
 feeling_lucky.onclick = function() {
 	window.location.href = 'http://www.google.com/search?btnI=3564&q=' + 
-		encodeURI(AddHistoryItem(query.value));
+		encodeURIComponent(AddHistoryItem(query.value));
 	return false;
 }
 
