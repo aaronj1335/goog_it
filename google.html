@@ -23,8 +23,13 @@ function AddHistoryItem(text) {
 }
 
 srch.onsubmit = function() {
+
+  if (! query.value)
+    return false
+
 	window.location.href = 'https://encrypted.google.com/#hl=en&q=' + 
 		encodeURI(AddHistoryItem(query.value));
+
 	return false;
 }
 
