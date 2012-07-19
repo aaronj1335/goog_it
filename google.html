@@ -1,8 +1,8 @@
 <html>
-<body style="padding: 36px;">
+<body style="padding: 36px; background-color:black;">
 	<div style="text-align:center">
-		<form autocomplete=on id=srch name=srch>
-			<input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;"/>
+		<form id=srch name=srch style="border: 3px solid #222; background-color:#444; padding: 18px; display: inline-block; border-radius: 35px; box-shadow: inset 0px 0px 10px black">
+			<input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;" autocomplete=on />
 			<input type=submit name="google_it" id="google_it" value="google it" />
 			<input type=submit name="feeling_lucky" id="feeling_lucky" value="im feelin lucky" />
 		</form>
@@ -53,6 +53,19 @@ try {
 	if (e.name !== 'SyntaxError') throw e;
 	var hist = {};
 }
+
+setTimeout(function() {
+  var el = document.createElement('iframe');
+  el.src="qclocktwo.html";
+  el.style.width = '570px';
+  el.style.margin = 'auto';
+  el.style.border = 'none';
+  el.style.display = 'block';
+  el.style.height = '568px';
+
+  document.body.appendChild(el);
+}, 15);
+
 console.log(hist);
 </SCRIPT>
 </body>

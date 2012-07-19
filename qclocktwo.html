@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>qclocktwo</title>
+  <!--
+    Copyright (c) 2012 Mahroof Ali, http://codepen.io/anon
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  -->
+
+  <style>
+@import url(http://fonts.googleapis.com/css?family=Josefin+Sans);
+
+* { box-sizing: border-box; }
+
+body{
+  font-family:'Josefin Sans', Arial, "Trebuchet MS", sans-serif;
+  background-color:black;
+}
+
+#clock{
+  position:relative;
+  display:block;
+  color:#000;
+  font-size:30px;
+  background: #FF7F00;
+  background: #FF7F00 linear-gradient(-75deg, rgba(0,0,0,0) 50%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.0) 100%);
+  width:550px;
+  padding:70px;
+  margin:0 auto;
+  transition:background-color 0.5s linear;
+}
+
+#letters, #letters span{
+   display:inline-block;
+   line-height:41px;
+   text-align:center;
+   transition:all 0.5s linear;
+}
+#letters span{
+    width:35px;
+}
+
+.light{
+  color:#fff !important;
+  text-shadow: 0px 0px 5px #fff;
+}
+
+#settings, #settings a{
+  color:#555;
+  font-size:13px;
+  width:156px;
+  margin:0 auto;
+}
+#settings a:hover{
+  text-shadow: 0 0 1px #fff;
+}
+#settings p{
+  margin:0;
+  width:100%;
+  text-align:center;
+}
+
+.button{
+  position:relative;
+  display:inline-block;
+  margin:0 4px;
+  background: linear-gradient(-75deg, rgba(0,0,0,0) 50%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.0) 100%);
+  height:20px;
+  opacity:0.3;
+  -webkit-transition:opacity 0.5s linear;
+     -moz-transition:opacity 0.5s linear;
+      -ms-transition:opacity 0.5s linear;
+       -o-transition:opacity 0.5s linear;
+          transition:opacity 0.5s linear;
+  width:20px;
+}
+
+#settings:hover .button{
+    opacity:1;
+}
+.button:hover{
+    box-shadow:0 0 3px 0 white inset;
+}
+
+.selected:before{
+   	content:'✔';
+    position:absolute;
+    color:rgba(255,255,255,0.4);
+    left:5px;
+    top:3px;
+}
+/* Background colors for the color Setting*/
+#darkblue{
+    background-color:rgb(0,0,139);
+}
+#darkred{
+    background-color:rgb(139,0,0);
+}
+#green{
+    background-color:rgb(100,120,0);
+}
+#purple{
+    background-color:rgb(70,40,120);
+}
+#orange{
+    background-color:rgb(150,80,0);
+}
+
+#desc{
+  margin:50px auto;
+  width:420px;
+  height:520px;
+  color:white;
+  font-size:18px;
+}
+
+/* dots in the edge for showing the minutes */
+#e0,#e1,#e2,#e3{ 
+    position:absolute;
+    color:black;    
+    font-size:15px;
+}
+
+#e0, #e1{
+  top:15px;
+}
+#e2, #e1{
+  right:25px;
+}
+#e0, #e3{
+  left:25px;
+}
+#e2, #e3{
+  bottom:20px;
+}
+
+/* Just some basic styling */
+h1{
+  display:block;
+  color:white;
+  width:100%;
+  text-align:center;
+}
+
+a{
+  color:#555;
+  text-decoration:none;
+}
+
+a:hover{
+  text-shadow:0 0 2px #555;
+}​
+  </style>
+
+  <style>
+    #codepen-footer, #codepen-footer * {
+      -webkit-box-sizing: border-box !important;
+      -moz-box-sizing: border-box !important;
+      box-sizing: border-box !important;
+    }
+    #codepen-footer {
+      display: block !important;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      padding: 0 10px !important;
+      margin: 0 !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      font-size: 12px !important;
+      color: #eeeeee !important;
+      background-color: #505050 !important;
+      text-align: left !important;
+      background: -webkit-linear-gradient(top, #505050, #383838) !important;
+      background: -moz-linear-gradient(top, #505050, #383838) !important;
+      background: -ms-linear-gradient(top, #505050, #383838) !important;
+      background: -o-linear-gradient(top, #505050, #383838) !important;
+      border-top: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-radius: 0 !important;
+      border-image: none !important;
+      box-shadow: inset 0 1px 0 #6e6e6e, 0 2px 2px rgba(0, 0, 0, 0.4) !important;
+      z-index: 300 !important;
+      font-family: "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif !important;
+      letter-spacing: 0 !important;
+      word-spacing: normal !important;
+      word-spacing: 0 !important;
+      -webkit-transform: none !important;
+      -moz-transform: none !important;
+      -ms-transform: none !important;
+      -o-transform: none !important;
+      transform: none !important;
+    }
+    #codepen-footer a {
+      color: #a7a7a7 !important;
+      text-decoration: none !important;
+    }
+    #codepen-footer a:hover {
+      color: white !important;
+    }
+  </style>
+  <script>
+    // Kill alerts, confirmations and prompts
+    window.alert   = function(){};
+    window.confirm = function(){};
+    window.prompt  = function(){};
+    window.open    = function(){};
+    window.print   = function(){};
+  </script>
+
+</head>
+<body>
+
+  <div id="clock">
+    <span id="e0">●</span>
+    <span id="e1">●</span>
+    <span id="e2">‌●</span>
+    <span id="e3">‌●</span>
+  	<div id="letters">
+    </div>
+</div>​
+
+
+
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+  <script>
+(function() {
+
+var language = {};
+language['english'] = {
+    map :  [["I","T","L","I","S","B","F","A","M","P","M"],
+            ["A","C","Q","U","A","R","T","E","R","D","C"],
+            ["T","W","E","N","T","Y","F","I","V","E","X"],
+            ["H","A","L","F","B","T","E","N","F","T","O"],
+            ["P","A","S","T","E","R","U","N","I","N","E"],
+            ["O","N","E","S","I","X","T","H","R","E","E"],
+            ["F","O","U","R","F","I","V","E","T","W","O"],
+            ["E","I","G","H","T","E","L","E","V","E","N"],
+            ["S","E","V","E","N","T","W","E","L","V","E"],
+            ["T","E","N","S","E","O","C","L","O","C","K"]],
+    sentences : {
+        default :  [ [[0,0,1],[0,3,4]] , [[9,5,10]] ],
+    hours : {
+        0 : [[[8,5,10]]],
+        1 : [[[5,0,2]]],
+        2 : [[[6,8,10]]],
+        3 : [[[5,6,10]]] ,
+        4 : [[[6,0,3]]],
+        5 : [[[6,4,7]]] ,
+        6 : [[[5,3,5]]],
+        7 : [[[8,0,4]]] ,
+        8 : [[[7,0,4]]],  
+        9 : [[[4,7,10]]] ,    
+        10: [[[9,0,2]]] ,
+        11: [[[7,5,10]]],
+        12: [[[8,5,10]]]
+    },
+    minutes :{
+      5  : [ [2,6,9]   , [4,0,3] ],
+      10 : [ [3,5,7]   , [4,0,3] ],
+      15 : [ [1,2,8]   , [4,0,3] ],
+      20 : [ [2,0,5]   , [4,0,3] ],
+      25 : [ [2,0,9]   , [4,0,3] ],
+      30 : [ [3,0,3]   , [4,0,3] ],
+      35 : [ [2,0,9]   , [3,9,10]],
+      40 : [ [2,0,5]   , [3,9,10]],
+      45 : [ [1,2,8]   , [3,9,10]],
+      50 : [ [3,5,7]   , [3,9,10] ],
+      55 : [ [2,6,9]   , [3,9,10] ],
+    },
+    incrementHourAt : 29
+    }
+}
+
+language['german'] = {
+  map : [["E","S","M","I","S","T","E","F","Ü","N","F"],
+        ["Z","E","H","N","Z","W","A","N","Z","I","G"],
+        ["N","A","C","H","V","I","E","R","T","E","L"],
+        ["V","O","R","N","A","C","H","H","A","L","B"],
+        ["E","I","N","S","I","N","K","Z","W","E","I"],
+        ["D","R","E","I","E","A","N","V","I","E","R"],
+        ["F","Ü","N","F","N","I","S","E","C","H","S"],
+        ["S","I","E","B","E","N","I","A","C","H","T"],
+        ["N","E","U","N","Z","E","H","N","E","L","F"],
+        ["Z","W","Ö","L","F","K","A","B","U","H","R"]],
+  sentences : {
+    default : [[[0,0,1], [0,3,5]], [[9,8,10]]],
+    hours : {
+        0 : [[[9,0,4]]],
+        1 : [[[4,0,2]]  , [[4,0,3]] ],
+        2 : [[[4,7,10]]],
+        3 : [[[5,0,3]]] ,
+        4 : [[[5,7,10]]],
+        5 : [[[6,0,3]]] ,
+        6 : [[[6,6,10]]],
+        7 : [[[7,0,5]]] ,
+        8 : [[[7,7,10]]],  
+        9 : [[[8,0,3]]] ,    
+        10: [[[8,4,7]]] ,
+        11: [[[8,8,10]]],
+        12: [[[9,0,4]]]
+    },
+    minutes :{
+      5  : [ [0,7,10]  , [2,0,3] ],
+      10 : [ [1,0,3]   , [2,0,3] ],
+      15 : [ [2,4,10]  , [3,3,6] ],
+      20 : [ [1,4,10]  , [3,3,6] ],
+      25 : [ [0,7,10]  , [3,0,2]  , [3,7,10] ],
+      30 : [ [3,7,10] ],
+      35 : [ [0,7,10]  , [2,0,3] , [3,7,10] ],
+      40 : [ [1,4,10]  , [3,0,2] ],
+      45 : [ [2,4,10]  , [3,0,2] ],
+      50 : [ [1,0,3]   , [3,0,2] ],
+      55 : [ [0,7,10]  , [3,0,2] ],
+    },
+    incrementHourAt : 24
+  }
+};
+
+var seconds = {
+    0 : [[[2,1,3],[3,0],[3,4],[4,0],[4,3],[4,4],[5,0],[5,2],[5,4],[6,0],[6,1],[6,4],[7,0],[7,4],[8,1,3]]],
+    1 : [[[2,2],[3,1],[3,2],[4,2],[5,2],[6,2],[7,2],[8,1,3]]],
+    2 : [[[2,1,3],[3,0],[3,4],[4,4],[5,3],[6,2],[7,1],[8,0,4]]],
+    3 : [[[2,0,4],[3,3],[4,2],[5,3],[6,4],[7,0],[7,4],[8,1,3]]],
+    4 : [[[2,3],[3,2],[3,3],[4,1],[4,3],[5,0],[5,3],[6,0,4],[7,3],[8,3]]],
+    5 : [[[2,0,4],[3,0],[4,0,3],[5,4],[6,4],[7,0,0],[7,4],[8,1,3]]],
+    6 : [[[2,2,3],[3,1],[4,0],[5,0,3],[6,0],[6,4],[7,0],[7,4],[8,1,3]]],
+    7 : [[[2,0,4],[3,4],[4,3],[5,2],[6,1],[7,1],[8,1],]],
+    8 : [[[2,1,3],[3,0],[3,4],[4,0],[4,4],[5,1,3],[6,0],[6,4],[7,0],[7,4],[8,1,3],]],
+    9 : [[[2,1,3],[3,0],[3,4],[4,0],[4,4],[5,1,4],[6,4],[7,3],[8,1,2]]]
+};
+
+var wordClock = {
+    letterMap 			: null,
+
+    prevSentence    : [],
+    prevSecond      : null,
+    language        : null,
+    letters         : null,
+
+    state						: 0, // 0 = Normal Clock, 1 = Show Seconds + Minutes
+
+  init : function(language){    
+    this.letters = document.getElementById('letters');
+    this.language = language;
+
+    this.buildLetters();
+
+		this.startClock();
+  },
+
+  startClock : function(){
+
+    this.hideLetters(this.prevSentence);
+    this.hideNumber(this.prevSecond);
+
+    this.showMinutes();
+
+    if (this.state == 0){
+   	 	this.showText(); 
+    }else{
+    	this.showSeconds();
+    }
+  },
+
+  switchState : function(state){
+    if (state !== undefined){
+    	this.state = state;
+    }else{
+    	this.state = ++this.state % 2;
+    }
+		this.startClock();
+  },
+
+  buildLetters : function(){
+    //Clear Letters
+    this.letters.innerHTML = "";
+
+    // Create 2D Array to store the span elements.
+    this.letterMap = [];
+    for (var i=0;i<this.language.map.length;i++){
+    	this.letterMap.push([]);
+    }
+    //"Draw" Letters
+    for (var x=0;x<this.language.map.length;x++){
+       for (var y=0;y<this.language.map[x].length;y++){
+            var span = document.createElement('span');     
+                span.appendChild(document.createTextNode(this.language.map[x][y]));
+         		// Add the letter to the lettrMap
+            this.letterMap[x].push(span);
+            this.letters.appendChild(span);
+       }
+    } 
+  },
+
+  showText: function(){
+    if (this.state !== 0)
+      return;
+
+    // Hide last Sentence
+    this.hideLetters(this.prevSentence);
+
+    var showClock = false;
+    var plural = true;
+    var hours = this.getHours();
+    var minutes = this.getMinutes();
+
+    var showArr = [];
+        showArr.push(this.language.sentences.default[0]);
+
+    if (minutes < 5){
+        showClock = true;
+        plural = false;
+    }else{
+        minutes -= minutes % 5;
+        showArr.push(this.language.sentences.minutes[minutes]);
+        if (minutes > this.language.sentences.incrementHourAt){
+            // Increment hour
+            hours = (hours+1) % 12;
+        }
+    }
+
+    if (plural && (this.language.sentences.hours[hours].length === 2)){
+      showArr.push(this.language.sentences.hours[hours][1])
+    }else{
+        showArr.push(this.language.sentences.hours[hours][0]);
+    }
+
+    if (showClock)
+      showArr.push(this.language.sentences.default[1]);    
+
+    this.showLetters(showArr);
+    this.prevSentence = showArr;
+
+    var that = this;
+    		// Wait for the rest of the 5min.
+        setTimeout(function(){that.showText();}, (5 - (this.getMinutes() % 5)) * 60000 - this.getSeconds()*1000 - this.getMilliseconds());
+  },
+
+  showMinutes : function(){
+    var minutes = this.getMinutes() % 5;
+
+    if (minutes === 0){
+       this.hideMinutesDot(4);
+    }else{
+    	 this.showMinutesDot(minutes);
+    }
+
+    var that = this;
+    setTimeout(function(){that.showMinutes();}, (60-this.getSeconds())*1000 - this.getMilliseconds());
+  },
+
+  showSeconds : function(){
+      if (this.state != 1)
+         return;
+
+    	var seconds = this.getSeconds();
+
+      this.hideNumber(this.prevSecond);       
+    	this.showNumber(seconds);
+
+    	this.prevSecond = seconds;
+    	var that = this;
+      setTimeout(function(){that.showSeconds();},1000-this.getMilliseconds());     
+  },
+
+  getHours : function(){
+    var hour = (new Date()).getHours();
+        return (hour > 11) ? hour - 12 : hour;
+    },
+
+  getMinutes : function(){
+        return (new Date()).getMinutes(); 
+    },
+
+  getSeconds: function(){
+      return  (new Date()).getSeconds(); 
+  },
+  getMilliseconds: function(){
+      return  (new Date()).getMilliseconds(); 
+  },
+  hideNumber : function(number){  
+    			if (number == undefined || number == null) return;
+  		  	var tens = seconds[~~(number/10)];
+        	var ones = seconds[(number % 10)];        	
+          this.changeClassLetters(tens, "", 0);
+        	this.changeClassLetters(ones, "", 6);
+  },
+  showNumber : function(number){  
+        tens = seconds[~~(number/10)];
+        ones = seconds[(number % 10)];
+        this.changeClassLetters(tens, "light", 0);
+        this.changeClassLetters(ones, "light", 6);
+  },
+  hideLetters : function(la){      
+      this.changeClassLetters(la, "", 0);
+  },
+  showLetters : function(la){
+      this.changeClassLetters(la, "light", 0);
+  },
+  hideMinutesDot : function(count){
+  	this.changeClassMinutes(count, '');
+  },
+  showMinutesDot : function(count){
+  	this.changeClassMinutes(count, 'light');
+  },
+  changeClassLetters: function(la, value, offset){ 
+    for (var s=0;s<la.length;s++){
+      for (var d=0;d<la[s].length;d++){
+          var x = la[s][d][0];
+          var y = la[s][d][1]+ offset;
+          if (la[s][d].length === 3){
+            var end = la[s][d][2]  + offset;
+            for (var i=y;i<=end;i++){
+              this.letterMap[x][i].className = value;
+            }
+          }else{
+             this.letterMap[x][y].className = value;
+          }
+      }
+    }    
+  },
+  changeClassMinutes : function(count, value){
+      for (var i=0;i<count;i++){          
+          document.getElementById("e"+i).className = value;
+      }          
+  } 
+};
+
+wordClock.init(language['english']);
+
+var clock = $("#clock");
+
+})();
+  </script>
+
+  
+
+</body>
+
+</html>
