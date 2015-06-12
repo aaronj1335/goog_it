@@ -1,75 +1,63 @@
 <!doctype html>
 <html>
-  <head><meta charset="utf-8"></head>
+<head><meta charset="utf-8"></head>
 <body style="padding: 36px;">
-	<div style="text-align:center">
-		<form id=srch name=srch style="display: inline-block;">
-			<input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;" autocomplete=on />
-			<input type=submit name="google_it" id="google_it" value="google it" />
-			<input type=submit name="feeling_lucky" id="feeling_lucky" value="im feelin lucky" />
-		</form>
+  <div style="text-align:center">
+    <form id=srch name=srch style="display: inline-block;">
+      <input id="q" type="search" name="q" autofocus style="font: 18px Helvetica; width:500px;" autocomplete=on />
+      <input type=submit name="google_it" id="google_it" value="google it" />
+      <input type=submit name="feeling_lucky" id="feeling_lucky" value="im feelin lucky" />
+    </form>
     <div class=wtf style="width:400px;font-size:186px;margin:auto;margin-top:40px;">☠</div>
-	</div>
+  </div>
 
 
-<SCRIPT>
+<script>
 var srch = document.getElementById('srch');
 var query = document.getElementById('q');
 var lucky = document.getElementById('feeling_lucky');
 
 function AddHistoryItem(text) {
-	hist[text] = hist[text] || {};
-	hist[text].count = hist[text].count + 1 || 1;
-	hist[text].last = new Date();
-	window.localStorage.hist = JSON.stringify(hist);
-	return text;
+  hist[text] = hist[text] || {};
+  hist[text].count = hist[text].count + 1 || 1;
+  hist[text].last = new Date();
+  window.localStorage.hist = JSON.stringify(hist);
+  return text;
 }
 
 srch.onsubmit = function() {
 
   if (! query.value)
-    return false
+    return false;
 
-	window.location.href = 'https://encrypted.google.com/#hl=en&q=' + 
-		encodeURIComponent(AddHistoryItem(query.value));
-	return false;
+  window.location.href = 'https://encrypted.google.com/#hl=en&q=' +
+    encodeURIComponent(AddHistoryItem(query.value));
+  return false;
 }
 
 feeling_lucky.onclick = function() {
-	window.location.href = 'http://www.google.com/search?btnI=3564&q=' + 
-		encodeURIComponent(AddHistoryItem(query.value));
-	return false;
+  window.location.href = 'http://www.google.com/search?btnI=3564&q=' +
+    encodeURIComponent(AddHistoryItem(query.value));
+  return false;
 }
 
 function pruneHistory() {
-	console.log('i should be pruning the history...');
+  console.log('i should be pruning the history...');
 }
 
 try {
-	var str = window.localStorage.hist || '';
+  var str = window.localStorage.hist || '';
 
-	if (str.length > Math.pow(2, 20))
-		setTimeout(pruneHistory, 0);
+  if (str.length > Math.pow(2, 20))
+    setTimeout(pruneHistory, 0);
 
-	var hist = JSON.parse(str);
+  var hist = JSON.parse(str);
 } catch (e) {
-	if (e.name !== 'SyntaxError') throw e;
-	var hist = {};
+  if (e.name !== 'SyntaxError') throw e;
+  var hist = {};
 }
 
-setTimeout(function() {
-  // var el = document.createElement('iframe');
-  // el.src="qclocktwo.html";
-  // el.style.width = '570px';
-  // el.style.margin = 'auto';
-  // el.style.border = 'none';
-  // el.style.display = 'block';
-  // el.style.height = '568px';
-
-  // document.body.appendChild(el);
-}, 15);
-
 console.log(hist);
-</SCRIPT>
+</script>
 </body>
 </html>
